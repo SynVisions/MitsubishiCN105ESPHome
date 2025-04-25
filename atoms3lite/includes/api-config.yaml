@@ -16,3 +16,4 @@ services:
     - service: use_internal_temperature
       then:
         - lambda: 'id(garage_ac).set_remote_temperature(0);'
+reboot_timeout: 0s
