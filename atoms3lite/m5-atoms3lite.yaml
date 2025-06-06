@@ -35,7 +35,7 @@ logger:
     CN105Climate: WARN
     CN105: INFO
     climate: WARN
-    sensor: WARN
+    sensor: INFO
     chkSum : INFO
     WRITE : WARN
     READ : WARN
