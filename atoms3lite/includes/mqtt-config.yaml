@@ -1,5 +1,4 @@
-#broker: home-io.local
-broker: homeassistant.dhcp
+broker: !secret broker_url
 username: !secret mqtt_login 
 password: !secret mqtt_password
 discovery: false

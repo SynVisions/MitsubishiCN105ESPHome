@@ -8,12 +8,6 @@ esphome:
   friendly_name: ${friendly_name}
   min_version: 2024.6.0
   #name_add_mac_suffix: true
-  on_boot:
-    priority: 200
-    then:
-      - delay: 30s
-      - switch.turn_off:
-          id: eps32_s3_led_switch
   project:
     name: esphome.clim_and_nt_proxy
     version: "24.7.4.1"
@@ -26,27 +20,27 @@ logger:
   baud_rate: 0
   level: DEBUG
   logs:
-    EVT_SETS : DEBUG
-    WIFI : INFO
-    MQTT : INFO
-    WRITE_SETTINGS : INFO
-    SETTINGS : DEBUG
-    STATUS : INFO
+    EVT_SETS: DEBUG
+    WIFI: INFO
+    MQTT: INFO
+    WRITE_SETTINGS: INFO
+    SETTINGS: DEBUG
+    STATUS: INFO
     CN105Climate: WARN
     CN105: INFO
     climate: WARN
     sensor: INFO
-    chkSum : INFO
-    WRITE : WARN
-    READ : WARN
-    ACK : DEBUG
-    REMOTE_TEMP : DEBUG
+    chkSum: INFO
+    WRITE: WARN
+    READ: WARN
+    ACK: DEBUG
+    REMOTE_TEMP: DEBUG
     Header: INFO
-    Decoder : INFO
-    CONTROL_WANTED_SETTINGS: INFO    
-    control: INFO    
+    Decoder: INFO
+    CONTROL_WANTED_SETTINGS: INFO
+    control: INFO
     UPDT_ITVL: DEBUG
-    CYCLE: DEBUG    
+    CYCLE: DEBUG
     esp32_ble_tracker: INFO
     esp32_ble_client: INFO
     esp-idf: INFO
@@ -57,65 +51,6 @@ esp32:
     type: arduino
     version: latest
   flash_size: 8MB
-
-light:
-## G35=RGB WS2812C-2020
-  - platform: esp32_rmt_led_strip
-    name: Led
-    id: led
-    internal: true
-    rgb_order: GRB
-    pin: 35
-    num_leds: 4
-    # RMT 0 channels will be occupied by IR
-    rmt_channel: 1
-    chipset: ws2812
-    restore_mode: ALWAYS_ON  #OFF?
-
-switch:
-  - platform: template
-    id: eps32_s3_led_switch
-    name: Led switch #${led_switch}
-    optimistic: true
-    restore_mode: RESTORE_DEFAULT_ON 
-    lambda: return id(eps32_s3_led_switch).state;
-    turn_on_action:
-      - light.turn_on:
-          id: led
-          brightness: !lambda |-
-            // output value must be in range 0 - 1.0
-            return id(led_brightness).state / 100.0;
-    turn_off_action:
-      - light.turn_off:
-          id: led
-
-
-number:
-    ## Set led brightness
-  - platform: template
-    id: led_brightness
-    name: Led brightness #${led_brightness}
-    icon: mdi:toggle-switch-variant
-    mode: slider
-    entity_category: config
-    optimistic: true
-    min_value: 0
-    max_value: 100
-    step: 10
-    initial_value: 70
-    restore_value: yes
-    unit_of_measurement: "%"
-    on_value:
-      then:
-        - if:
-            condition:
-              - light.is_on: led
-            then:
-            - light.turn_on:
-                id: led
-                brightness: !lambda |-
-                  // output value must be in range 0 - 1.0
-                  return id(led_brightness).state / 100.0;
 
 # mqtt, api, ota, wifi, captive, web, time
 <<: !include includes/ha-integration-config.yaml
